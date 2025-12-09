@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onUnmounted } from 'vue'
 import type { ITask } from '@/shared/types/task.ts'
 
 interface DeletionTimer {
@@ -62,7 +62,7 @@ const startDeletion = () => {
     return
   }
 
-  const timerId = window.setInterval(() => {
+  const timerId = setInterval(() => {
     if (!deletionTimer.value) {
       return
     }
@@ -90,6 +90,8 @@ const cancelDeletion = () => {
   clearInterval(deletionTimer.value.timerId)
   deletionTimer.value = null
 }
+
+onUnmounted(() => cancelDeletion)
 </script>
 
 <style scoped>

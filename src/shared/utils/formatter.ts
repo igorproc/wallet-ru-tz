@@ -1,4 +1,4 @@
-export function formatDate(date: Date | null) {
+export function formatDate(date: number | null) {
   if (!date) {
     return '—'
   }

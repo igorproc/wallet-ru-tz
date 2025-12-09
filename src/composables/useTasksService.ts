@@ -1,4 +1,4 @@
-import {computed, ref, watch} from 'vue'
+import { computed, ref } from 'vue'
 import { setToLocalStorage } from '@/shared/utils/local-storage.ts'
 import { TASK_LIST_LOCAL_STORAGE_KEY } from '@/shared/const/task.ts'
 
@@ -40,6 +40,8 @@ export function useTasksService() {
 
   const addTask = (task: ITask) => {
     taskList.value = [...taskList.value, task]
+
+    setToLocalStorage(TASK_LIST_LOCAL_STORAGE_KEY, taskList.value)
   }
   const toggleTask = (task: Pick<ITask, 'id'>) => {
     const item = taskList.value.find(item => item.id === task.id)
@@ -47,24 +49,22 @@ export function useTasksService() {
       return
     }
 
-    item.updatedAt = new Date()
+    item.updatedAt = Date.now()
     if (item.completedAt) {
       item.completedAt = null
     } else {
-      item.completedAt = new Date()
+      item.completedAt = Date.now()
     }
+
+    setToLocalStorage(TASK_LIST_LOCAL_STORAGE_KEY, taskList.value)
   }
   const deleteTask = (task: Pick<ITask, 'id'>) => {
     taskList.value = taskList
       .value
       .filter(item => item.id !== task.id)
-  }
 
-  watch(
-    () => taskList.value,
-    () => setToLocalStorage(TASK_LIST_LOCAL_STORAGE_KEY, taskList.value),
-    { deep: true },
-  )
+    setToLocalStorage(TASK_LIST_LOCAL_STORAGE_KEY, taskList.value)
+  }
 
   return {
     // Getters

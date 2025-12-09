@@ -88,8 +88,8 @@ const formatTaskAndAdd = (task: string) => {
   const newTask: ITask = {
     id: generateId(),
     title: task,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().getTime(),
+    updatedAt: new Date().getTime(),
     completedAt: null
   }
 
@@ -98,7 +98,7 @@ const formatTaskAndAdd = (task: string) => {
 
 onMounted(async () => {
   const tasks = await getUserTask()
-  setTaskList(tasks)
+  setTaskList(tasks || [])
 })
 </script>
 
